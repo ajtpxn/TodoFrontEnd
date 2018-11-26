@@ -1,0 +1,185 @@
+<div>
+  <h1 class="jumbotron text-center display-2">
+    {{ title }}
+    <span class="badge badge-secondary">{{ getNumberOfTodos() }} </span>
+  </h1>
+</div>
+<div *ngIf="view === 'home'" class="container">
+  <div>
+    <table class="table">
+      <thead class="thead-dark">
+        <tr>
+          <th>Task</th>
+          <th>Mark</th>
+          <th>Completed</th>
+          <th></th>
+          <th class="text-center">
+            <button (click)="showAdd()" class="btn btn-success">
+              Add New Task
+            </button>
+          </th>
+        </tr>
+      </thead>
+      <tr *ngFor="let item of todos">
+        <td>{{ item.task }}</td>
+        <td class="text-center">
+          <input
+            type="checkbox"
+            name="mark"
+            [(ngModel)]="item.completed"
+            (change)="updateCompleted(item)"
+          />
+        </td>
+        <td class="text-center">{{ item.completed }}</td>
+        <td class="text-center">
+          <button (click)="populateSelected(item)" class="btn btn-secondary">
+            Details
+          </button>
+        </td>
+        <td class="text-center">
+          <button (click)="deleteTodo(item.id)" class="btn btn-danger">
+            Delete
+          </button>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+<div *ngIf="view === 'add'" class="container">
+  <div class="jumbotron">
+    <form>
+      <div class="form-row">
+        <div class="form-group col-2"><label for="todoTask">Task: </label></div>
+        <div class="form-group col-6">
+          <label for="todoDesc">Description: </label>
+        </div>
+        <div class="form-group col-sm"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-2">
+          <input
+            type="text"
+            name="todoTask"
+            [(ngModel)]="newTodo.task"
+            class="form-control"
+          />
+          <br />
+        </div>
+        <div class="form-group col-6">
+          <input
+            type="text"
+            name="todoDesc"
+            [(ngModel)]="newTodo.description"
+            class="form-control"
+          />
+        </div>
+        <div class="form-group col-sm">
+          <input
+            type="submit"
+            (click)="addTask()"
+            value="Add"
+            class="btn btn-success"
+          />
+          &nbsp;
+          <input
+            type="submit"
+            (click)="displayTable()"
+            value="Cancel"
+            class="btn btn-danger"
+          />
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<div *ngIf="view === 'selected'" class="container">
+  <div class="jumbotron">
+    <h1 class="text-center">Task Detail View</h1>
+    <table class="table">
+      <thead class="thead-dark">
+        <tr>
+          <th>Id</th>
+          <th>Task</th>
+          <th>Description</th>
+          <th>Completed</th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <td>{{ selected.id }}</td>
+        <td>{{ selected.task }}</td>
+        <td>{{ selected.description }}</td>
+        <td>{{ selected.completed }}</td>
+        <td>
+          <button class="btn btn-success" (click)="setEditingTodo(selected)">
+            Edit
+          </button>
+        </td>
+        <td>
+          <button class="btn btn-secondary" (click)="displayTable()">
+            Back
+          </button>
+        </td>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div *ngIf="view === 'editor'" class="container">
+  <div class="jumbotron">
+    <form>
+      <div class="form-row">
+        <div class="form-group col-2"><label for="task">Task</label></div>
+        <div class="form-group col-8">
+          <label for="description">Description</label>
+        </div>
+        <div class="form-group col-2"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-2">
+          <input
+            type="text"
+            name="task"
+            class="form-control"
+            [(ngModel)]="editing.task"
+          />
+        </div>
+        <div class="form-group col-8">
+          <input
+            name="description"
+            class="form-control"
+            [(ngModel)]="editing.description"
+          />
+        </div>
+        <div class="form-group col-2">
+          <button
+            type="button"
+            (click)="saveChangesToTask(editing.id)"
+            class="btn btn-success"
+          >
+            Save
+          </button>
+          &nbsp;
+          <button
+            type="button"
+            (click)="populateSelected(selected)"
+            class="btn btn-danger"
+          >
+            Cancel
+          </button>
+          <br />
+          <br />
+          <div class="form-check">
+            <input
+              name="completed"
+              class="form-check-input"
+              type="checkbox"
+              [(ngModel)]="editing.completed"
+            />
+            <label class="form-check-label" for="completed"> Completed </label>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
